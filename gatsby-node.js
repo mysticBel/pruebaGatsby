@@ -1,18 +1,22 @@
 const path = require(`path`)
 const { createFilePath } = require(`gatsby-source-filesystem`)
+const { isNumber } = require("util")
 
 exports.createPages = async ({ graphql, actions, reporter }) => {
   const { createPage } = actions
 
+
   // Define a template for blog post
   const blogPost = path.resolve(`./src/templates/blog-post.js`)
-
+  const nuevaPlantilla = path.resolve(`./src/templates/nuevo.js`) //agregado
+  const articleTemplate = path.resolve(`./src/templates/article.js`) //agregado
+  const pruebaArticle = path.resolve(`./src/templates/prueba.js`) //agregado
   // Get all markdown blog posts sorted by date
   const result = await graphql(
     `
       {
         allMarkdownRemark(
-          sort: { fields: [frontmatter___date], order: ASC }
+          sort: { fields: [frontmatter___date], order: DESC }
           limit: 1000
         ) {
           nodes {
@@ -56,6 +60,45 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       })
     })
   }
+
+  //agregado hoy :)
+  if (posts.length > 0) {
+    const array = ['prueba1', 'prueba2', 'prueba3'];
+
+    array.forEach((path => {
+      createPage({
+          path: path,
+          component: pruebaArticle,
+          context: {  },
+        })
+    }
+ ))}
+
+  if (posts.length > 0) {
+     //agregado 
+     const array = ['path1', 'path2', 'path3'];
+
+     array.forEach((path => {
+       createPage({
+           path: path,
+           component: nuevaPlantilla,
+           context: {  },
+         })
+     }
+  ))}
+
+  if (posts.length > 0) {
+    //agregado 
+    const array = ['article1', 'article2', 'article3'];
+
+    array.forEach((path => {
+      createPage({
+          path: path,
+          component: articleTemplate,
+          context: {  },
+        })
+    }
+ ))}
 }
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
